@@ -1,24 +1,28 @@
-import React from 'react';
-import Header from '../components/Header';
-// import ProductList from '../components/ProductList';
+import React, { useState, useEffect } from 'react';
+import ProductList from '../components/ProductList';
+import api from "./../utils/api";
 
-function Home() {
+const Home = () => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    api.getProducts().then((data) => {
+      console.log(data);
+      setProducts(data);
+    });
+  }, []);
   return (
     <div>
-      <Header />
       <main>
         <h1>Welcome to Flower Eshop!</h1>
-        <p>We offer a wide selection of beautiful flowers for any occasion.</p>
-        <p>We offer a wide selection of beautiful flowers for any occasion.</p>
-        <p>We offer a wide selection of beautiful flowers for any occasion.</p>
-        <p>We offer a wide selection of beautiful flowers for any occasion.</p>
-        <p>We offer a wide selection of beautiful flowers for any occasion.</p>
-        <p>We offer a wide selection of beautiful flowers for any occasion.</p>
-        <p>We offer a wide selection of beautiful flowers for any occasion.</p>
-        <p>We offer a wide selection of beautiful flowers for any occasion.</p>
-        <p>We offer a wide selection of beautiful flowers for any occasion.</p>
-        <p>We offer a wide selection of beautiful flowers for any occasion.</p>
-        {/* <ProductList /> */}
+        {products.map((product) => (
+          <ProductList
+            key={product.id}
+            name={product.name}
+            description={product.description}
+            price={product.price}
+          />
+      ))}
       </main>
     </div>
   );
