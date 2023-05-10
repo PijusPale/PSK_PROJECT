@@ -15,7 +15,7 @@ public class RefundController {
     private final RefundService refundService;
     @PostMapping(value = "/refund")
     public Refund add(@RequestBody RefundRequestDTO refundRequest){
-        return refundService.saveRefund(refundRequest);
+        return refundService.createRefund(refundRequest);
     }
 
     @GetMapping("/refunds")

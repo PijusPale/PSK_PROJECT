@@ -15,7 +15,7 @@ import java.util.List;
 public class RefundServiceImpl implements RefundService{
     private final RefundRepository refundRepository;
     @Override
-    public Refund saveRefund(RefundRequestDTO refundRequest) {
+    public Refund createRefund(RefundRequestDTO refundRequest) {
         var newRefund = Refund.builder()
                 .orderId(refundRequest.getOrderId())
                 .businessId(refundRequest.getBusinessId())
