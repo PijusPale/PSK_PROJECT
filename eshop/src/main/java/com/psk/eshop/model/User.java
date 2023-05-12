@@ -1,11 +1,12 @@
 package com.psk.eshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.psk.eshop.enums.UserType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -23,4 +24,14 @@ public class User {
     private String password;
     private String phoneNo;
     private String address;
+    @JsonIgnore
+    @OneToOne(mappedBy = "user")
+    private Order order;
+    @JsonIgnore
+    @OneToOne(mappedBy = "user")
+    private Refund refund;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private Set<Product> products = new HashSet<>();
 }

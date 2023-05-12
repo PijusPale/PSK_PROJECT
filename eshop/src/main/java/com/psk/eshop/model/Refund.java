@@ -16,9 +16,12 @@ public class Refund {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long orderId; //TODO add mapping when order model is created
-    private Long customerId; //TODO add mapping when customer model is created
-    private Long businessId; //TODO add mapping when business model is created
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private Order order;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private User user;
     private RefundStatus refundStatus;
     private Timestamp createdDate;
     private String description;

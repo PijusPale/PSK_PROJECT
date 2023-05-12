@@ -9,7 +9,6 @@ import java.sql.Timestamp;
 public class RefundRequestDTO {
     private Long orderId;
     private Long customerId;
-    private Long businessId;
     private RefundStatus refundStatus;
     private Timestamp createdDate;
     private String description;

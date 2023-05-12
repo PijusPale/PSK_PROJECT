@@ -14,10 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderServiceImpl implements OrderService{
     private OrderRepository orderRepository;
+    private UserService userService;
     @Override
     public Order createOrder(OrderRequestDTO orderRequest) {
         var newOrder = Order.builder()
-                .userId(orderRequest.getUserId())
+                .user(userService.getUserById(orderRequest.getUserId()))
                 .orderStatus(orderRequest.getOrderStatus())
                 .price(orderRequest.getPrice())
                 .shippingAddress(orderRequest.getShippingAddress())
@@ -39,7 +40,7 @@ public class OrderServiceImpl implements OrderService{
     public Order updateOrder(Long orderId, OrderRequestDTO orderRequest) {
         return orderRepository.findById(orderId)
                 .map(order -> {
-                    order.setUserId(orderRequest.getUserId());
+                    order.setUser(userService.getUserById(orderRequest.getUserId()));
                     order.setOrderStatus(orderRequest.getOrderStatus());
                     order.setPrice(orderRequest.getPrice());
                     order.setShippingAddress(orderRequest.getShippingAddress());

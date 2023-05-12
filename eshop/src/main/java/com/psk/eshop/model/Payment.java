@@ -2,10 +2,7 @@ package com.psk.eshop.model;
 
 import com.psk.eshop.enums.PaymentType;
 import com.psk.eshop.enums.TransactionState;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -21,7 +18,9 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long orderId; //TODO map when order model is created
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private Order order;
     private PaymentType paymentType;
     private BigDecimal amount;
     private Timestamp transactionDate;

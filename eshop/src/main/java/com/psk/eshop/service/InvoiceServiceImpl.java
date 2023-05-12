@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class InvoiceServiceImpl implements InvoiceService{
     private final InvoiceRepository invoiceRepository;
+    private final OrderService orderService;
 
     @Override
     public Invoice getInvoiceById(Long invoiceId) {
@@ -25,12 +26,11 @@ public class InvoiceServiceImpl implements InvoiceService{
     @Override
     public Invoice createInvoice(InvoiceRequestDTO invoiceRequest) {
         var newInvoice = Invoice.builder()
-                .orderId(invoiceRequest.getOrderId())
+                .order(orderService.getOrderById(invoiceRequest.getOrderId()))
                 .createdDate(invoiceRequest.getCreatedDate())
                 .paymentType(invoiceRequest.getPaymentType())
                 .notes(invoiceRequest.getNotes())
                 .amount(invoiceRequest.getAmount())
-                .customerId(invoiceRequest.getCustomerId())
                 .build();
         return invoiceRepository.save(newInvoice);
     }
@@ -39,12 +39,11 @@ public class InvoiceServiceImpl implements InvoiceService{
     public Invoice updateInvoice(Long invoiceId, InvoiceRequestDTO invoiceRequest) {
         return invoiceRepository.findById(invoiceId)
                 .map(invoice -> {
-                    invoice.setOrderId(invoiceRequest.getOrderId());
+                    invoice.setOrder(orderService.getOrderById(invoiceRequest.getOrderId()));
                     invoice.setCreatedDate(invoiceRequest.getCreatedDate());
                     invoice.setPaymentType(invoiceRequest.getPaymentType());
                     invoice.setNotes(invoiceRequest.getNotes());
                     invoice.setAmount(invoiceRequest.getAmount());
-                    invoice.setCustomerId(invoiceRequest.getCustomerId());
                     return invoiceRepository.save(invoice);
                 })
                 .orElseThrow(

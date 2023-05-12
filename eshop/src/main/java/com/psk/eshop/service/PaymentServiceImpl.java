@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PaymentServiceImpl implements PaymentService{
     private final PaymentRepository paymentRepository;
+    private final OrderService orderService;
     @Override
     public Payment getPaymentById(Long paymentId) {
         return paymentRepository.findById(paymentId).orElseThrow(
@@ -33,7 +34,7 @@ public class PaymentServiceImpl implements PaymentService{
                 .amount(paymentRequest.getAmount())
                 .billingAddress(paymentRequest.getBillingAddress())
                 .transactionDate(paymentRequest.getTransactionDate())
-                .orderId(paymentRequest.getOrderId())
+                .order(orderService.getOrderById(paymentRequest.getOrderId()))
                 .transactionState(paymentRequest.getTransactionState())
                 .build();
         return paymentRepository.save(newPayment);
@@ -45,7 +46,7 @@ public class PaymentServiceImpl implements PaymentService{
                 .map(payment -> {
                     payment.setPaymentType(paymentRequest.getPaymentType());
                     payment.setAmount(paymentRequest.getAmount());
-                    payment.setOrderId(paymentRequest.getOrderId());
+                    payment.setOrder(orderService.getOrderById(paymentRequest.getOrderId()));
                     payment.setBillingAddress(paymentRequest.getBillingAddress());
                     payment.setTransactionDate(paymentRequest.getTransactionDate());
                     payment.setTransactionState(paymentRequest.getTransactionState());

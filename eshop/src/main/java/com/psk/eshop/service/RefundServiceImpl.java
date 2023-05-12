@@ -14,14 +14,15 @@ import java.util.List;
 @AllArgsConstructor
 public class RefundServiceImpl implements RefundService{
     private final RefundRepository refundRepository;
+    private final OrderService orderService;
+    private final UserService userService;
     @Override
     public Refund createRefund(RefundRequestDTO refundRequest) {
         var newRefund = Refund.builder()
-                .orderId(refundRequest.getOrderId())
-                .businessId(refundRequest.getBusinessId())
+                .order(orderService.getOrderById(refundRequest.getOrderId()))
                 .refundStatus(refundRequest.getRefundStatus())
                 .createdDate(refundRequest.getCreatedDate())
-                .customerId(refundRequest.getCustomerId())
+                .user(userService.getUserById(refundRequest.getCustomerId()))
                 .description(refundRequest.getDescription())
                 .build();
         return refundRepository.save(newRefund);
@@ -38,10 +39,9 @@ public class RefundServiceImpl implements RefundService{
                 .map(refund -> {
                     refund.setRefundStatus(refundRequest.getRefundStatus());
                     refund.setDescription(refundRequest.getDescription());
-                    refund.setBusinessId(refundRequest.getBusinessId());
                     refund.setCreatedDate(refundRequest.getCreatedDate());
-                    refund.setCustomerId(refundRequest.getCustomerId());
-                    refund.setOrderId(refundRequest.getOrderId());
+                    refund.setUser(userService.getUserById(refundRequest.getCustomerId()));
+                    refund.setOrder(orderService.getOrderById(refundRequest.getOrderId()));
                     return refundRepository.save(refund);
                 })
                 .orElseThrow(

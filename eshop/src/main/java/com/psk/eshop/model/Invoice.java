@@ -1,10 +1,8 @@
 package com.psk.eshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.psk.eshop.enums.PaymentType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -21,9 +19,9 @@ public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long orderId; //TODO map with orders when created
-    private Long customerId; //TODO map with customer when customer is created
-//    private Set<Product> products;//TODO map with product when created. OneToMany
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private Order order;
     private Timestamp createdDate;
     private PaymentType paymentType;
     private BigDecimal amount;
