@@ -16,9 +16,8 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/product")
-    public String add(@RequestBody ProductRequestDTO product){
-        productService.createProduct(product);
-        return "new product is added!";
+    public Product add(@RequestBody ProductRequestDTO product){
+        return productService.createProduct(product);
     }
 
     @GetMapping("/products")

@@ -16,9 +16,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/user")
-    public String add(@RequestBody UserRequestDTO user){
-        userService.createUser(user);
-        return "new user is added!";
+    public User add(@RequestBody UserRequestDTO user){
+        return userService.createUser(user);
     }
 
     @GetMapping("/users")
