@@ -1,5 +1,6 @@
 package com.psk.eshop.model;
 
+import com.psk.eshop.enums.OrderStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,13 +15,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class Product {
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long userId;
-    private Long discountId;
+    private OrderStatus orderStatus;
     private BigDecimal price;
-    private String name;
-    private String description;
+    private String shippingAddress;
 }

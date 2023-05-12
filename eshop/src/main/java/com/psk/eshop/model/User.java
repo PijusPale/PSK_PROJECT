@@ -1,12 +1,11 @@
 package com.psk.eshop.model;
 
+import com.psk.eshop.enums.UserType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
-
-import java.math.BigDecimal;
 
 @Entity
 @Getter
@@ -14,13 +13,14 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class Product {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long userId;
-    private Long discountId;
-    private BigDecimal price;
+    private UserType userType;
     private String name;
-    private String description;
+    private String email;
+    private String password;
+    private String phoneNo;
+    private String address;
 }
