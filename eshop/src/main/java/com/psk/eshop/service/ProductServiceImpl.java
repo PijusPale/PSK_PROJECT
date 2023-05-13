@@ -5,9 +5,12 @@ import com.psk.eshop.model.Product;
 import com.psk.eshop.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -22,6 +25,7 @@ public class ProductServiceImpl implements ProductService{
                 .price(productRequest.getPrice())
                 .name(productRequest.getName())
                 .description(productRequest.getDescription())
+                .picture(getPictureIfNotEmpty(productRequest.getPicture()))
                 .build();
         return productRepository.save(newProduct);
     }
@@ -45,10 +49,25 @@ public class ProductServiceImpl implements ProductService{
                     product.setPrice(productRequest.getPrice());
                     product.setName(productRequest.getName());
                     product.setDescription(productRequest.getDescription());
+                    product.setPicture(getPictureIfNotEmpty(productRequest.getPicture()));
                     return productRepository.save(product);
                 })
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Product with id %d not found", productId))
                 );
+    }
+
+    private byte[] getPictureIfNotEmpty(MultipartFile picture){
+        if(picture.isEmpty()){
+            return null;
+        }
+        else {
+            try {
+                return picture.getBytes();
+            } catch (IOException e) {
+                // Handle error reading picture data
+                return null;
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.psk.eshop.controller;
 
+import com.psk.eshop.dto.OrderFilterDTO;
 import com.psk.eshop.dto.OrderRequestDTO;
 import com.psk.eshop.model.Order;
 import com.psk.eshop.service.OrderService;
@@ -28,6 +29,11 @@ public class OrderController {
     @GetMapping("/order/{orderId}")
     public Order getOrderById(@PathVariable Long orderId){
         return orderService.getOrderById(orderId);
+    }
+
+    @GetMapping("/orders/filter")
+    public List<Order> filterOrders(OrderFilterDTO orderFilter){
+        return orderService.filterOrders(orderFilter);
     }
 
     @PutMapping("/order/{orderId}")
