@@ -4,7 +4,9 @@ import com.psk.eshop.dto.ProductRequestDTO;
 import com.psk.eshop.model.Product;
 import com.psk.eshop.service.ProductService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,9 +17,9 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @PostMapping("/product")
-    public Product add(@RequestBody ProductRequestDTO product){
-        return productService.createProduct(product);
+    @PostMapping(value = "/product")
+    public Product add(@RequestBody ProductRequestDTO product, @RequestParam MultipartFile file){
+        return productService.createProduct(product, file);
     }
 
     @GetMapping("/products")
@@ -31,7 +33,7 @@ public class ProductController {
     }
 
     @PutMapping("/product/{productId}")
-    public Product update(@PathVariable Long productId, @RequestBody ProductRequestDTO productRequest){
-        return productService.updateProduct(productId, productRequest);
+    public Product update(@PathVariable Long productId, @RequestBody ProductRequestDTO productRequest, @RequestParam MultipartFile file){
+        return productService.updateProduct(productId, productRequest, file);
     }
 }

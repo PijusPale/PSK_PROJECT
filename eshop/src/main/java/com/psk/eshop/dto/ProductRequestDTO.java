@@ -12,5 +12,4 @@ public class ProductRequestDTO {
     private BigDecimal price;
     private String name;
     private String description;
-    private MultipartFile picture;
 }
