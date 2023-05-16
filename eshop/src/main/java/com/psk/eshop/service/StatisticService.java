@@ -10,4 +10,5 @@ public interface StatisticService {
     Statistic updateStatistic(Long statisticId, StatisticRequestDTO statisticRequest);
     Statistic getStatisticById(Long statisticId);
     List<Statistic> getStatistics();
+    void deleteStatisticById(Long statisticId);
 }
