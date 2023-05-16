@@ -5,7 +5,6 @@ import com.psk.eshop.model.Product;
 import com.psk.eshop.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -55,6 +54,20 @@ public class ProductServiceImpl implements ProductService{
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Product with id %d not found", productId))
                 );
+    }
+    @Override
+    public void deleteProductById(Long productId) {
+        Product product = getProductById(productId);
+
+        if (hasActiveOrdersWithProduct(product)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Cannot delete product. There are active orders with this product (productId = %d).", productId));
+        }
+
+        productRepository.deleteById(productId);
+    }
+
+    private boolean hasActiveOrdersWithProduct(Product product) {
+        return !product.getOrders().isEmpty();
     }
 
     private byte[] getPictureIfNotEmpty(MultipartFile picture){

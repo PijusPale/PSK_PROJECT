@@ -4,6 +4,7 @@ import com.psk.eshop.dto.OrderFilterDTO;
 import com.psk.eshop.dto.OrderRequestDTO;
 import com.psk.eshop.model.Order;
 import com.psk.eshop.repository.OrderRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,12 @@ public class OrderServiceImpl implements OrderService{
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Order with id %d not found", orderId))
                 );
+    }
+    @Transactional
+    @Override
+    public void deleteOrderById(Long orderId)
+    {
+        orderRepository.deleteById(orderId);
     }
 
     @Override

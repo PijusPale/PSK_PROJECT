@@ -56,4 +56,9 @@ public class PaymentServiceImpl implements PaymentService{
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Payment with id %d not found", paymentId))
                 );
     }
+    @Override
+    public void deletePaymentById(Long paymentId)
+    {
+        paymentRepository.deleteById(paymentId);
+    }
 }

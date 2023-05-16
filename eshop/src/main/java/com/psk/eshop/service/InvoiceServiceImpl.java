@@ -50,6 +50,11 @@ public class InvoiceServiceImpl implements InvoiceService{
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Invoice with id %d not found", invoiceId))
                 );
     }
+    @Override
+    public void deleteInvoiceById(Long invoiceId)
+    {
+        invoiceRepository.deleteById(invoiceId);
+    }
 
     @Override
     public List<Invoice> getInvoices() {

@@ -53,4 +53,9 @@ public class UserServiceImpl implements UserService{
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with id %d not found", userId))
                 );
     }
+    @Override
+    public void deleteUserById(Long userId)
+    {
+        userRepository.deleteById(userId);
+    }
 }

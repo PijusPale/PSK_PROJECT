@@ -10,4 +10,5 @@ public interface InvoiceService {
     Invoice createInvoice(InvoiceRequestDTO invoiceRequest);
     Invoice updateInvoice(Long invoiceId, InvoiceRequestDTO invoiceRequest);
     List<Invoice> getInvoices();
+    void deleteInvoiceById(Long invoiceId);
 }

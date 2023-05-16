@@ -40,4 +40,9 @@ public class OrderController {
     public Order update(@PathVariable Long orderId, @RequestBody OrderRequestDTO orderRequest){
         return orderService.updateOrder(orderId, orderRequest);
     }
+    @DeleteMapping("/order/{orderId}")
+    public void deleteOrderById(@PathVariable Long orderId)
+    {
+        orderService.deleteOrderById(orderId);
+    }
 }
