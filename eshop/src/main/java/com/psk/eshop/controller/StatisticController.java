@@ -32,4 +32,9 @@ public class StatisticController { //TODO create filtering by orderstatus when o
     public Statistic update(@PathVariable Long statisticId, @RequestBody StatisticRequestDTO statisticRequest){
         return statisticService.updateStatistic(statisticId, statisticRequest);
     }
+    @DeleteMapping("/statistic/{statisticId}")
+    public void deleteStatisticById(@PathVariable Long statisticId)
+    {
+        statisticService.deleteStatisticById(statisticId);
+    }
 }

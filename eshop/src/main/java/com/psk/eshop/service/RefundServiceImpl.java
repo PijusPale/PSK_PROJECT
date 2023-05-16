@@ -48,6 +48,11 @@ public class RefundServiceImpl implements RefundService{
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Refund with id %d not found", refundId))
                 );
     }
+    @Override
+    public void deleteRefundById(Long refundId)
+    {
+        refundRepository.deleteById(refundId);
+    }
 
     @Override
     public Refund getRefundById(Long refundId) {

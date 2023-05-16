@@ -36,4 +36,10 @@ public class ProductController {
     public Product update(@PathVariable Long productId, @RequestBody ProductRequestDTO productRequest, @RequestParam MultipartFile file){
         return productService.updateProduct(productId, productRequest, file);
     }
+
+    @DeleteMapping("/product/{productId}")
+    public void deleteProductById(@PathVariable Long productId)
+    {
+        productService.deleteProductById(productId);
+    }
 }

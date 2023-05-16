@@ -9,4 +9,5 @@ public interface PaymentService {
     List<Payment> getPayments();
     Payment createPayment(PaymentRequestDTO paymentRequest);
     Payment updatePayment(Long paymentId, PaymentRequestDTO paymentRequest);
+    void deletePaymentById(Long paymentId);
 }

@@ -32,4 +32,9 @@ public class PaymentController {
     public Payment update(@PathVariable Long paymentId, @RequestBody PaymentRequestDTO paymentRequest){
         return paymentService.updatePayment(paymentId, paymentRequest);
     }
+    @DeleteMapping("/payment/{paymentId}")
+    public void deletePaymentById(@PathVariable Long paymentId)
+    {
+        paymentService.deletePaymentById(paymentId);
+    }
 }
