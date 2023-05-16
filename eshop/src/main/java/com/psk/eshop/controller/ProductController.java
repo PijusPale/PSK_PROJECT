@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -18,7 +19,12 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping(value = "/product")
-    public Product add(@RequestBody ProductRequestDTO product, @RequestParam MultipartFile file){
+    public Product add(@RequestParam MultipartFile file){
+        ProductRequestDTO product = ProductRequestDTO.builder()
+                .description("lala")
+                .price(new BigDecimal(5))
+                .name("flower")
+                .build();
         return productService.createProduct(product, file);
     }
 
