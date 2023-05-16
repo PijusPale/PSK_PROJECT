@@ -27,5 +27,6 @@ public class Product {
     private BigDecimal price;
     private String name;
     private String description;
-    private byte[] picture;
+    private String picturePath;
+//    private byte[] picture;
 }
