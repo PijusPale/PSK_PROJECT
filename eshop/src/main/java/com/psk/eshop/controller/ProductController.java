@@ -1,6 +1,7 @@
 package com.psk.eshop.controller;
 
 import com.psk.eshop.dto.ProductRequestDTO;
+import com.psk.eshop.dto.UserIdDTO;
 import com.psk.eshop.model.Product;
 import com.psk.eshop.service.ProductService;
 import lombok.AllArgsConstructor;
@@ -19,13 +20,19 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping(value = "/product")
-    public Product add(@RequestParam MultipartFile file){
-        ProductRequestDTO product = ProductRequestDTO.builder()
+    public Product add(@RequestBody ProductRequestDTO product){
+        return productService.createProduct(product);
+    }
+
+    @PostMapping(value = "/product/picture")
+    public Product addProductWithPicture(@RequestBody UserIdDTO product, @RequestParam MultipartFile file){
+        ProductRequestDTO newProduct = ProductRequestDTO.builder()
+                .userId(product.getUserId())
                 .description("lala")
                 .price(new BigDecimal(5))
                 .name("flower")
                 .build();
-        return productService.createProduct(product, file);
+        return productService.createProductWithPicture(newProduct, file);
     }
 
     @GetMapping("/products")
@@ -39,8 +46,8 @@ public class ProductController {
     }
 
     @PutMapping("/product/{productId}")
-    public Product update(@PathVariable Long productId, @RequestBody ProductRequestDTO productRequest, @RequestParam MultipartFile file){
-        return productService.updateProduct(productId, productRequest, file);
+    public Product update(@PathVariable Long productId, @RequestBody ProductRequestDTO productRequest){
+        return productService.updateProduct(productId, productRequest);
     }
 
     @DeleteMapping("/product/{productId}")

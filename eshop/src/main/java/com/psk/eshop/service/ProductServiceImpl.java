@@ -23,14 +23,13 @@ import java.util.Map;
 public class ProductServiceImpl implements ProductService{
     private ProductRepository productRepository;
     @Override
-    public Product createProduct(ProductRequestDTO productRequest, MultipartFile file) {
+    public Product createProduct(ProductRequestDTO productRequest) {
         var newProduct = Product.builder()
                 .userId(productRequest.getUserId())
                 .discountId(productRequest.getDiscountId())
                 .price(productRequest.getPrice())
                 .name(productRequest.getName())
                 .description(productRequest.getDescription())
-                .picturePath(getCloudinaryPicture(file))
                 .build();
         return productRepository.save(newProduct);
     }
@@ -46,7 +45,7 @@ public class ProductServiceImpl implements ProductService{
         );
     }
     @Override
-    public Product updateProduct(Long productId, ProductRequestDTO productRequest, MultipartFile file) {
+    public Product updateProduct(Long productId, ProductRequestDTO productRequest) {
         return productRepository.findById(productId)
                 .map(product -> {
                     product.setUserId(productRequest.getUserId());
@@ -54,13 +53,26 @@ public class ProductServiceImpl implements ProductService{
                     product.setPrice(productRequest.getPrice());
                     product.setName(productRequest.getName());
                     product.setDescription(productRequest.getDescription());
-                    product.setPicturePath(getCloudinaryPicture(file));
                     return productRepository.save(product);
                 })
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Product with id %d not found", productId))
                 );
     }
+
+    @Override
+    public Product createProductWithPicture(ProductRequestDTO productRequest, MultipartFile file) {
+        var newProduct = Product.builder()
+                .userId(productRequest.getUserId())
+                .discountId(productRequest.getDiscountId())
+                .price(productRequest.getPrice())
+                .name(productRequest.getName())
+                .description(productRequest.getDescription())
+                .picturePath(getCloudinaryPicture(file))
+                .build();
+        return productRepository.save(newProduct);
+    }
+
     @Override
     public void deleteProductById(Long productId) {
         Product product = getProductById(productId);
