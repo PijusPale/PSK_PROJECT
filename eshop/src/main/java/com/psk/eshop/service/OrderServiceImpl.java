@@ -3,6 +3,7 @@ package com.psk.eshop.service;
 import com.psk.eshop.dto.OrderFilterDTO;
 import com.psk.eshop.dto.OrderRequestDTO;
 import com.psk.eshop.model.Order;
+import com.psk.eshop.model.Product;
 import com.psk.eshop.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,11 +23,14 @@ public class OrderServiceImpl implements OrderService{
     private ProductService productService;
     @Override
     public Order createOrder(OrderRequestDTO orderRequest) {
+        List<Product> products = orderRequest.getProductIds().stream()
+                .map(id -> productService.getProductById(id))
+                .collect(Collectors.toList());
         var newOrder = Order.builder()
-                .products(orderRequest.getProductIds().stream().map(id -> productService.getProductById(id)).collect(Collectors.toList()))
+                .products(products)
                 .user(userService.getUserById(orderRequest.getUserId()))
                 .orderStatus(orderRequest.getOrderStatus())
-                .price(orderRequest.getPrice())
+                .price(products.stream().map(Product::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add))
                 .shippingAddress(orderRequest.getShippingAddress())
                 .build();
         return orderRepository.save(newOrder);
@@ -43,12 +48,15 @@ public class OrderServiceImpl implements OrderService{
     }
     @Override
     public Order updateOrder(Long orderId, OrderRequestDTO orderRequest) {
+        List<Product> products = orderRequest.getProductIds().stream()
+                .map(id -> productService.getProductById(id))
+                .collect(Collectors.toList());
         return orderRepository.findById(orderId)
                 .map(order -> {
-                    order.setProducts(orderRequest.getProductIds().stream().map(id -> productService.getProductById(id)).collect(Collectors.toList()));
+                    order.setProducts(products);
                     order.setUser(userService.getUserById(orderRequest.getUserId()));
                     order.setOrderStatus(orderRequest.getOrderStatus());
-                    order.setPrice(orderRequest.getPrice());
+                    order.setPrice(products.stream().map(Product::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add));
                     order.setShippingAddress(orderRequest.getShippingAddress());
                     return orderRepository.save(order);
                 })
