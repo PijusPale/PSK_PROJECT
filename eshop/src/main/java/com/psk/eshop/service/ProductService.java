@@ -12,4 +12,5 @@ public interface ProductService {
     Product getProductById(Long productId);
     Product updateProduct(Long productId, ProductRequestDTO productRequest, MultipartFile file);
     void deleteProductById(Long productId);
+    Long getProductQuantityById(Long productId);
 }

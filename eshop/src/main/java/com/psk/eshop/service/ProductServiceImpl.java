@@ -5,11 +5,9 @@ import com.cloudinary.utils.ObjectUtils;
 import com.psk.eshop.dto.ProductRequestDTO;
 import com.psk.eshop.model.Product;
 import com.psk.eshop.repository.ProductRepository;
-import com.psk.eshop.utils.FileUploadUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -71,6 +69,13 @@ public class ProductServiceImpl implements ProductService{
         }
 
         productRepository.deleteById(productId);
+    }
+    @Override
+    public Long getProductQuantityById(Long productId){
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Product with id %d not found", productId))
+        );
+        return product.getQuantity();
     }
 
     private boolean hasActiveOrdersWithProduct(Product product) {
