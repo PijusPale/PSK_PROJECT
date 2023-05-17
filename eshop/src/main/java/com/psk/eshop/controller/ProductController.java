@@ -1,5 +1,7 @@
 package com.psk.eshop.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.psk.eshop.dto.ProductRequestDTO;
 import com.psk.eshop.dto.UserIdDTO;
 import com.psk.eshop.model.Product;
@@ -20,19 +22,9 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping(value = "/product")
-    public Product add(@RequestBody ProductRequestDTO product){
-        return productService.createProduct(product);
-    }
-
-    @PostMapping(value = "/product/picture")
-    public Product addProductWithPicture(@RequestBody UserIdDTO product, @RequestParam MultipartFile file){
-        ProductRequestDTO newProduct = ProductRequestDTO.builder()
-                .userId(product.getUserId())
-                .description("lala")
-                .price(new BigDecimal(5))
-                .name("flower")
-                .build();
-        return productService.createProductWithPicture(newProduct, file);
+    public Product add(@RequestParam String productRequest, @RequestParam MultipartFile file) throws JsonProcessingException {
+        ProductRequestDTO product = new ObjectMapper().readValue(productRequest, ProductRequestDTO.class);
+        return productService.createProduct(product, file);
     }
 
     @GetMapping("/products")
@@ -46,8 +38,9 @@ public class ProductController {
     }
 
     @PutMapping("/product/{productId}")
-    public Product update(@PathVariable Long productId, @RequestBody ProductRequestDTO productRequest){
-        return productService.updateProduct(productId, productRequest);
+    public Product update(@PathVariable Long productId, @RequestParam String productRequest, @RequestParam MultipartFile file) throws JsonProcessingException {
+        ProductRequestDTO product = new ObjectMapper().readValue(productRequest, ProductRequestDTO.class);
+        return productService.updateProduct(productId, product, file);
     }
 
     @DeleteMapping("/product/{productId}")
