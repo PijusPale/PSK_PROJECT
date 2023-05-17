@@ -7,6 +7,7 @@ import Home from './pages/Home';
 // import Contacts from './pages/Contacts';
 import Header from './components/Header';
 import './styles/App.css';
+import ProductForm from './pages/ProductForm';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <div className="MainContent">
           <Routes>
             <Route exact path="/" element={<Home/>} />
+            <Route exact path="/add-product" element={<ProductForm/>} />
           </Routes>
         </div>
       </div>
