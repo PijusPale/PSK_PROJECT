@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from './pages/Home';
-// import About from './pages/About';
+import About from './pages/About';
 // import Services from './pages/Services';
-// import FAQ from './pages/FAQ';
-// import Contacts from './pages/Contacts';
+import Contacts from './pages/Contacts';
 import Header from './components/Header';
 import './styles/App.css';
 import ProductForm from './pages/ProductForm';
+import Faq from './pages/Faq';
 
 function App() {
   return (
@@ -18,6 +18,9 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Home/>} />
             <Route exact path="/add-product" element={<ProductForm/>} />
+            <Route exact path="/about" element={<About />} />
+            <Route exact path="/faq" element={<Faq />} />
+            <Route exact path="/contacts" element={<Contacts />} />
           </Routes>
         </div>
       </div>
