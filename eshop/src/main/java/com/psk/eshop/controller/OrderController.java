@@ -33,7 +33,7 @@ public class OrderController {
     }
 
     @GetMapping("/orders/filter")
-    public List<Order> filterOrders(OrderFilterDTO orderFilter){
+    public List<Order> filterOrders(OrderFilterDTO orderFilter) {
         return orderService.filterOrders(orderFilter);
     }
 

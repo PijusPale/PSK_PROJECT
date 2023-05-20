@@ -46,4 +46,8 @@ public class ProductController {
     {
         productService.deleteProductById(productId);
     }
+    @GetMapping("/product/{productId}/quantity")
+    public Long getProductQuantityById(@PathVariable Long productId){
+        return productService.getProductQuantityById(productId);
+    }
 }
