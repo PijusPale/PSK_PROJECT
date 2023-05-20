@@ -3,6 +3,8 @@ package com.psk.eshop.service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.psk.eshop.dto.ProductRequestDTO;
+import com.psk.eshop.enums.OrderStatus;
+import com.psk.eshop.model.Order;
 import com.psk.eshop.model.Product;
 import com.psk.eshop.repository.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -79,7 +81,13 @@ public class ProductServiceImpl implements ProductService{
     }
 
     private boolean hasActiveOrdersWithProduct(Product product) {
-        return !product.getOrders().isEmpty();
+        for (Order order : product.getOrders()) {
+            OrderStatus orderStatus = order.getOrderStatus();
+            if (orderStatus != OrderStatus.REJECTED) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String getCloudinaryPicture(MultipartFile file){
