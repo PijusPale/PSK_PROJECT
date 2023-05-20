@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Getter
 public class RefundRequestDTO {
     private Long orderId;
-    private Long customerId;
+    private String userEmail;
     private RefundStatus refundStatus;
     private Timestamp createdDate;
     private String description;

@@ -11,6 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderFilterDTO {
-    private Long userId;
+    private String userEmail;
     private OrderStatus orderStatus;
 }

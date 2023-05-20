@@ -12,17 +12,17 @@ import java.math.BigDecimal;
 @Getter
 @Builder
 public class ProductRequestDTO {
-    private Long userId;
+    private String userEmail;
     private Long discountId;
     private BigDecimal price;
     private String name;
     private String description;
 
     @JsonCreator
-    public ProductRequestDTO(@JsonProperty("userId") Long userId, @JsonProperty("discountId") Long discountId,
+    public ProductRequestDTO(@JsonProperty("userEmail") String userEmail, @JsonProperty("discountId") Long discountId,
                              @JsonProperty("price") BigDecimal price, @JsonProperty("name") String name,
                              @JsonProperty("description") String description) {
-        this.userId = userId;
+        this.userEmail = userEmail;
         this.discountId = discountId;
         this.price = price;
         this.name = name;

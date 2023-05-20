@@ -23,7 +23,7 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public Product createProduct(ProductRequestDTO productRequest, MultipartFile file) {
         var newProduct = Product.builder()
-                .userId(productRequest.getUserId())
+                .userEmail(productRequest.getUserEmail())
                 .discountId(productRequest.getDiscountId())
                 .price(productRequest.getPrice())
                 .name(productRequest.getName())
@@ -47,7 +47,7 @@ public class ProductServiceImpl implements ProductService{
     public Product updateProduct(Long productId, ProductRequestDTO productRequest, MultipartFile file) {
         return productRepository.findById(productId)
                 .map(product -> {
-                    product.setUserId(productRequest.getUserId());
+                    product.setUserEmail(productRequest.getUserEmail());
                     product.setDiscountId(productRequest.getDiscountId());
                     product.setPrice(productRequest.getPrice());
                     product.setName(productRequest.getName());
