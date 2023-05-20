@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 public class OrderFilterDTO {
-    private Long userId;
+    private String userEmail;
     private OrderStatus orderStatus;
 }

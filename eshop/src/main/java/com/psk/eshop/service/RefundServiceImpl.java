@@ -15,14 +15,13 @@ import java.util.List;
 public class RefundServiceImpl implements RefundService{
     private final RefundRepository refundRepository;
     private final OrderService orderService;
-    private final UserService userService;
     @Override
     public Refund createRefund(RefundRequestDTO refundRequest) {
         var newRefund = Refund.builder()
                 .order(orderService.getOrderById(refundRequest.getOrderId()))
                 .refundStatus(refundRequest.getRefundStatus())
                 .createdDate(refundRequest.getCreatedDate())
-                .user(userService.getUserById(refundRequest.getCustomerId()))
+                .userEmail(refundRequest.getUserEmail())
                 .description(refundRequest.getDescription())
                 .build();
         return refundRepository.save(newRefund);
@@ -40,7 +39,7 @@ public class RefundServiceImpl implements RefundService{
                     refund.setRefundStatus(refundRequest.getRefundStatus());
                     refund.setDescription(refundRequest.getDescription());
                     refund.setCreatedDate(refundRequest.getCreatedDate());
-                    refund.setUser(userService.getUserById(refundRequest.getCustomerId()));
+                    refund.setUserEmail(refundRequest.getUserEmail());
                     refund.setOrder(orderService.getOrderById(refundRequest.getOrderId()));
                     return refundRepository.save(refund);
                 })

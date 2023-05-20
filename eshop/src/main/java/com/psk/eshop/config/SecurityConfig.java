@@ -33,14 +33,13 @@ public class SecurityConfig {
 
         return jwtDecoder;
     }
-@Bean
-public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.authorizeRequests()
-            .requestMatchers("/auth0/public").permitAll()
-            .requestMatchers("/auth0/private").authenticated()
-//            .requestMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
-            .and().cors()
-            .and().oauth2ResourceServer().jwt();
-    return http.build();
-}
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .requestMatchers("/e-shop/products").permitAll()
+                .requestMatchers("/e-shop/**").authenticated()
+                .and().cors()
+                .and().oauth2ResourceServer().jwt();
+        return http.build();
+    }
 }

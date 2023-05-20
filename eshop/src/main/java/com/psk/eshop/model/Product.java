@@ -21,8 +21,10 @@ public class Product {
     @ManyToMany(mappedBy = "products", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JsonIgnore
     private Set<Order> orders = new HashSet<>();
-    @Column(name = "user_id")
-    private Long userId;
+//    @Column(name = "user_id")
+//    private Long userId;
+
+    private String userEmail;
     private Long discountId;
     private BigDecimal price;
     private String name;

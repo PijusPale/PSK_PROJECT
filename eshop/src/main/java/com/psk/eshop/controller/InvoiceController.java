@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/e-shop")
+@CrossOrigin("*")
 @AllArgsConstructor
 public class InvoiceController {
     private final InvoiceService invoiceService;

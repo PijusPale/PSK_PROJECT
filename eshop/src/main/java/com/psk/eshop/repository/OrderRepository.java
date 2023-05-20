@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    @Query("SELECT o FROM Order o WHERE o.user.id = ?1 AND o.orderStatus=?2")
-    List<Order> filterOrders(Long userId, OrderStatus orderStatus);
+    @Query("SELECT o FROM Order o WHERE o.userEmail = ?1 AND o.orderStatus=?2")
+    List<Order> filterOrders(String userEmail, OrderStatus orderStatus);
 }
