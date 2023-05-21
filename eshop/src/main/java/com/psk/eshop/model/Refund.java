@@ -19,9 +19,10 @@ public class Refund {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    private User user;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+//    private User user;
+    private String userEmail;
     private RefundStatus refundStatus;
     private Timestamp createdDate;
     private String description;

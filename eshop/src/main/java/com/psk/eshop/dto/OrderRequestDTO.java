@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 public class OrderRequestDTO {
     private List<Long> productIds;
-    private Long userId;
+    private String userEmail;
     private OrderStatus orderStatus;
     private String shippingAddress;
 }

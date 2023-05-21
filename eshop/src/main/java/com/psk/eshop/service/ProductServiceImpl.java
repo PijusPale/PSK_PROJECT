@@ -3,6 +3,8 @@ package com.psk.eshop.service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.psk.eshop.dto.ProductRequestDTO;
+import com.psk.eshop.enums.OrderStatus;
+import com.psk.eshop.model.Order;
 import com.psk.eshop.model.Product;
 import com.psk.eshop.repository.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -23,7 +25,7 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public Product createProduct(ProductRequestDTO productRequest, MultipartFile file) {
         var newProduct = Product.builder()
-                .userId(productRequest.getUserId())
+                .userEmail(productRequest.getUserEmail())
                 .discountId(productRequest.getDiscountId())
                 .price(productRequest.getPrice())
                 .name(productRequest.getName())
@@ -47,7 +49,7 @@ public class ProductServiceImpl implements ProductService{
     public Product updateProduct(Long productId, ProductRequestDTO productRequest, MultipartFile file) {
         return productRepository.findById(productId)
                 .map(product -> {
-                    product.setUserId(productRequest.getUserId());
+                    product.setUserEmail(productRequest.getUserEmail());
                     product.setDiscountId(productRequest.getDiscountId());
                     product.setPrice(productRequest.getPrice());
                     product.setName(productRequest.getName());
@@ -79,7 +81,13 @@ public class ProductServiceImpl implements ProductService{
     }
 
     private boolean hasActiveOrdersWithProduct(Product product) {
-        return !product.getOrders().isEmpty();
+        for (Order order : product.getOrders()) {
+            OrderStatus orderStatus = order.getOrderStatus();
+            if (orderStatus != OrderStatus.REJECTED) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String getCloudinaryPicture(MultipartFile file){

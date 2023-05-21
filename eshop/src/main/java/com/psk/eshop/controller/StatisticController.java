@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/e-shop")
+@CrossOrigin("*")
 @AllArgsConstructor
 public class StatisticController { //TODO create filtering by orderstatus when order is created
     private final StatisticService statisticService;

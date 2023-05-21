@@ -19,9 +19,11 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+//    @OneToOne
+//    @JoinColumn(name = "user_id", referencedColumnName = "id")
+//    private User user;
+
+    private String userEmail;
     private OrderStatus orderStatus;
     private BigDecimal price;
     private String shippingAddress;

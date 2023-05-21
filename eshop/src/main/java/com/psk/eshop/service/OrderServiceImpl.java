@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class OrderServiceImpl implements OrderService{
     private OrderRepository orderRepository;
-    private UserService userService;
     private ProductService productService;
     @Override
     public Order createOrder(OrderRequestDTO orderRequest) {
@@ -28,7 +27,7 @@ public class OrderServiceImpl implements OrderService{
                 .collect(Collectors.toList());
         var newOrder = Order.builder()
                 .products(products)
-                .user(userService.getUserById(orderRequest.getUserId()))
+                .userEmail(orderRequest.getUserEmail())
                 .orderStatus(orderRequest.getOrderStatus())
                 .price(products.stream().map(Product::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add))
                 .shippingAddress(orderRequest.getShippingAddress())
@@ -54,7 +53,7 @@ public class OrderServiceImpl implements OrderService{
         return orderRepository.findById(orderId)
                 .map(order -> {
                     order.setProducts(products);
-                    order.setUser(userService.getUserById(orderRequest.getUserId()));
+                    order.setUserEmail(orderRequest.getUserEmail());
                     order.setOrderStatus(orderRequest.getOrderStatus());
                     order.setPrice(products.stream().map(Product::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add));
                     order.setShippingAddress(orderRequest.getShippingAddress());
@@ -73,6 +72,6 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public List<Order> filterOrders(OrderFilterDTO orderFilter) {
-        return orderRepository.filterOrders(orderFilter.getUserId(), orderFilter.getOrderStatus());
+        return orderRepository.filterOrders(orderFilter.getUserEmail(), orderFilter.getOrderStatus());
     }
 }
