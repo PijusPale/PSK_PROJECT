@@ -37,6 +37,11 @@ public class StatisticServiceImpl implements StatisticService{
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Statistic with id %d not found", statisticId))
                 );
     }
+    @Override
+    public void deleteStatisticById(Long statisticId)
+    {
+        statisticRepository.deleteById(statisticId);
+    }
 
     @Override
     public Statistic getStatisticById(Long statisticId) {

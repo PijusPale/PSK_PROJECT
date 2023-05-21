@@ -1,31 +1,34 @@
 package com.psk.eshop.service;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.psk.eshop.dto.ProductRequestDTO;
 import com.psk.eshop.model.Product;
 import com.psk.eshop.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService{
     private ProductRepository productRepository;
     @Override
-    public Product createProduct(ProductRequestDTO productRequest) {
+    public Product createProduct(ProductRequestDTO productRequest, MultipartFile file) {
         var newProduct = Product.builder()
                 .userId(productRequest.getUserId())
                 .discountId(productRequest.getDiscountId())
                 .price(productRequest.getPrice())
                 .name(productRequest.getName())
                 .description(productRequest.getDescription())
-                .picture(getPictureIfNotEmpty(productRequest.getPicture()))
+                .picturePath(getCloudinaryPicture(file))
                 .build();
         return productRepository.save(newProduct);
     }
@@ -41,7 +44,7 @@ public class ProductServiceImpl implements ProductService{
         );
     }
     @Override
-    public Product updateProduct(Long productId, ProductRequestDTO productRequest) {
+    public Product updateProduct(Long productId, ProductRequestDTO productRequest, MultipartFile file) {
         return productRepository.findById(productId)
                 .map(product -> {
                     product.setUserId(productRequest.getUserId());
@@ -49,7 +52,7 @@ public class ProductServiceImpl implements ProductService{
                     product.setPrice(productRequest.getPrice());
                     product.setName(productRequest.getName());
                     product.setDescription(productRequest.getDescription());
-                    product.setPicture(getPictureIfNotEmpty(productRequest.getPicture()));
+                    product.setPicturePath(getCloudinaryPicture(file));
                     return productRepository.save(product);
                 })
                 .orElseThrow(
@@ -57,17 +60,42 @@ public class ProductServiceImpl implements ProductService{
                 );
     }
 
-    private byte[] getPictureIfNotEmpty(MultipartFile picture){
-        if(picture.isEmpty()){
-            return null;
+    @Override
+    public void deleteProductById(Long productId) {
+        Product product = getProductById(productId);
+
+        if (hasActiveOrdersWithProduct(product)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Cannot delete product. There are active orders with this product (productId = %d).", productId));
         }
-        else {
-            try {
-                return picture.getBytes();
-            } catch (IOException e) {
-                // Handle error reading picture data
-                return null;
-            }
+
+        productRepository.deleteById(productId);
+    }
+    @Override
+    public Long getProductQuantityById(Long productId){
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Product with id %d not found", productId))
+        );
+        return product.getQuantity();
+    }
+
+    private boolean hasActiveOrdersWithProduct(Product product) {
+        return !product.getOrders().isEmpty();
+    }
+
+    private String getCloudinaryPicture(MultipartFile file){
+        Map config = new HashMap();
+        config.put("cloud_name", "drlkduluz");
+        config.put("api_key", "138657524274591");
+        config.put("api_secret", "ov27viA2NibOXi9eAZHXh05IiSI");
+        Cloudinary cloudinary = new Cloudinary(config);
+
+        try {
+            Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+//            Map uploadResult = cloudinary.uploader().upload("https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg", ObjectUtils.asMap("public_id", "olympic_flag"));
+            return (String) uploadResult.get("secure_url");
+        }
+        catch (IOException e){
+            return null;
         }
     }
 }

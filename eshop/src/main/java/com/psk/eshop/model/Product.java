@@ -18,7 +18,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToMany(mappedBy = "products")
+    @ManyToMany(mappedBy = "products", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JsonIgnore
     private Set<Order> orders = new HashSet<>();
     @Column(name = "user_id")
@@ -27,5 +27,6 @@ public class Product {
     private BigDecimal price;
     private String name;
     private String description;
-    private byte[] picture;
+    private String picturePath;
+    private Long quantity;
 }

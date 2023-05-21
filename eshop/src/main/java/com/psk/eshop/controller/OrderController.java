@@ -32,12 +32,17 @@ public class OrderController {
     }
 
     @GetMapping("/orders/filter")
-    public List<Order> filterOrders(OrderFilterDTO orderFilter){
+    public List<Order> filterOrders(OrderFilterDTO orderFilter) {
         return orderService.filterOrders(orderFilter);
     }
 
     @PutMapping("/order/{orderId}")
     public Order update(@PathVariable Long orderId, @RequestBody OrderRequestDTO orderRequest){
         return orderService.updateOrder(orderId, orderRequest);
+    }
+    @DeleteMapping("/order/{orderId}")
+    public void deleteOrderById(@PathVariable Long orderId)
+    {
+        orderService.deleteOrderById(orderId);
     }
 }

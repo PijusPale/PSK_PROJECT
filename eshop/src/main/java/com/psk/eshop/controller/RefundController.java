@@ -32,4 +32,9 @@ public class RefundController {
     public Refund update(@PathVariable Long refundId, @RequestBody RefundRequestDTO refundRequest){
         return refundService.updateRefund(refundId, refundRequest);
     }
+    @DeleteMapping("/refund/{refundId}")
+    public void deleteRefundById(@PathVariable Long refundId)
+    {
+        refundService.deleteRefundById(refundId);
+    }
 }
