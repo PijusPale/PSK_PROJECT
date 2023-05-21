@@ -1,5 +1,6 @@
 import React from "react";
 import '../styles/Product.css';
+import { Card, Button } from 'react-bootstrap';
 
 const ProductList = (props) => {
   const handleAddToCart = () => {
@@ -8,12 +9,18 @@ const ProductList = (props) => {
     props.addToCart(props);
   };
   return (
-    <div className="product">
-      <h3>{props.name}</h3>
-      <p>{props.description}</p>
-      <p>{props.price} €</p>
-      <button onClick={handleAddToCart}>Add to Cart</button>
-    </div>
+    <Card className="my-4">
+      <div className="d-flex align-items-center card-container">
+        <Card.Img className="product-image" variant="left" src={props.picturePath} alt="flowers"/>
+        <Card.Body>
+          <Card.Title>{props.name}</Card.Title>
+          <Card.Text>{props.description}</Card.Text>
+          <Card.Text>{props.price} €</Card.Text>
+          <Card.Text>Quantity: {props.quantity}</Card.Text>
+          <Button variant="primary" onClick={handleAddToCart}>Add to Cart</Button>
+        </Card.Body>
+      </div>
+    </Card>
   );
 };
 

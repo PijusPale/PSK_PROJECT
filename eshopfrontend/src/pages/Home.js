@@ -70,6 +70,8 @@ const Home = () => {
             name={product.name}
             description={product.description}
             price={product.price}
+            quantity={product.quantity}
+            picturePath={product.picturePath}
             addToCart={() => handleAddToCart(product)}
           />
       ))}
