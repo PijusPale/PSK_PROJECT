@@ -31,6 +31,7 @@ public class ProductServiceImpl implements ProductService{
                 .name(productRequest.getName())
                 .description(productRequest.getDescription())
                 .picturePath(getCloudinaryPicture(file))
+                .quantity(productRequest.getQuantity())
                 .build();
         return productRepository.save(newProduct);
     }
@@ -55,6 +56,7 @@ public class ProductServiceImpl implements ProductService{
                     product.setName(productRequest.getName());
                     product.setDescription(productRequest.getDescription());
                     product.setPicturePath(getCloudinaryPicture(file));
+                    product.setQuantity(productRequest.getQuantity());
                     return productRepository.save(product);
                 })
                 .orElseThrow(
