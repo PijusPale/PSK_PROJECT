@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Form, Button, Alert } from 'react-bootstrap';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const ProductForm = () => {
-  const [userId, setUserId] = useState("");
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [discountId, setDiscountId] = useState("");
   const [price, setPrice] = useState("");
   const [name, setName] = useState('');
@@ -18,7 +19,7 @@ const ProductForm = () => {
     setShowSuccess(false);
     setShowError(false);
 
-    if(!userId || !discountId || !price || !name || !description || !file) {
+    if(!user || !discountId || !price || !name || !description || !file) {
       setShowError(true);
       setErrorMessage("All fields are required");
       return;
@@ -26,7 +27,7 @@ const ProductForm = () => {
 
     let formData = new FormData();
     formData.append('productRequest', JSON.stringify({
-      userId: Number(userId),
+      userEmail: String(user.email),
       discountId: Number(discountId),
       price: Number(price),
       name,
@@ -35,8 +36,10 @@ const ProductForm = () => {
     formData.append('file', file);
 
     try {
+      const token = await getAccessTokenSilently();
       const response = await axios.post('http://localhost:9999/e-shop/product', formData, {
         headers: {
+           Authorization: `Bearer ${token}`,
           // 'Content-Type': 'multipart/form-data',
         },
       });
@@ -64,11 +67,8 @@ const ProductForm = () => {
   };
 
   return (
+
     <Form onSubmit={handleSubmit}>
-      <Form.Group className="mb-3">
-        <Form.Label>User ID</Form.Label>
-        <Form.Control type="number" placeholder="User ID" value={userId} onChange={e => setUserId(e.target.value)} />
-      </Form.Group>
 
       <Form.Group className="mb-3">
         <Form.Label>Discount ID</Form.Label>
