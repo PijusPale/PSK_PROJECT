@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from './pages/Home';
+import Cart from './pages/Cart';
 import About from './pages/About';
 // import Services from './pages/Services';
 import Contacts from './pages/Contacts';
@@ -17,6 +18,7 @@ function App() {
         <div className="MainContent">
           <Routes>
             <Route exact path="/" element={<Home/>} />
+            <Route path="/cart" element={<Cart/>} />
             <Route exact path="/add-product" element={<ProductForm/>} />
             <Route exact path="/about" element={<About />} />
             <Route exact path="/faq" element={<Faq />} />
