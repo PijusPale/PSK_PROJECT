@@ -4,6 +4,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.psk.eshop.dto.ProductRequestDTO;
 import com.psk.eshop.enums.OrderStatus;
+import com.psk.eshop.interceptors.Loggable;
 import com.psk.eshop.model.Order;
 import com.psk.eshop.model.Product;
 import com.psk.eshop.repository.ProductRepository;
@@ -23,6 +24,7 @@ import java.util.Map;
 public class ProductServiceImpl implements ProductService{
     private ProductRepository productRepository;
     @Override
+    @Loggable
     public Product createProduct(ProductRequestDTO productRequest, MultipartFile file) {
         var newProduct = Product.builder()
                 .userEmail(productRequest.getUserEmail())
@@ -37,16 +39,19 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    @Loggable
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
     @Override
+    @Loggable
     public Product getProductById(Long productId) {
         return productRepository.findById(productId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Product with id %d not found", productId))
         );
     }
     @Override
+    @Loggable
     public Product updateProduct(Long productId, ProductRequestDTO productRequest, MultipartFile file) {
         return productRepository.findById(productId)
                 .map(product -> {
@@ -65,6 +70,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    @Loggable
     public void deleteProductById(Long productId) {
         Product product = getProductById(productId);
 
@@ -75,6 +81,7 @@ public class ProductServiceImpl implements ProductService{
         productRepository.deleteById(productId);
     }
     @Override
+    @Loggable
     public Long getProductQuantityById(Long productId){
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Product with id %d not found", productId))
