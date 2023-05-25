@@ -1,59 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import ProductList from '../components/ProductList';
 import api from "./../utils/api";
+import { useAuth0 } from '@auth0/auth0-react';
+
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [ordreId, setOrderId] = useState(-1);
-
+  const [order, setOrder] = useState([]); 
+  const { user, isAuthenticated } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
+  const [token, setToken] = useState(null);
   const handleAddToCart = (product) => {
-    setCartItems([...cartItems, product]);
+    if(order.length == 0){
+        const orderData = {
+        productIds: [product.id],
+        orderStatus: 'PLACED',
+        userEmail: user.email,
+        shippingAddress: 'Lietuva, Vilnius, Gedimino pr. 1'
+      };
+      console.log(orderData)
+      api.postOrder(orderData,token).then((data) => {
+        setOrder([data]);
+      });
+    }
+    else {
+      var productIds = order[0].products.map(function(product) {
+        return product.id;
+      });
+      productIds.push(product.id)
+      const orderData = {
+        productIds: productIds,
+        orderStatus: 'PLACED',
+        userEmail: user.email,
+      }
+      console.log(orderData)
+      api.putOrder(orderData,order[0].id,token).then((data) => {
+        setOrder([data]);
+      });
+    }
   };
-  
 
   useEffect(() => {
-    const user_id = 1;
-    console.log(cartItems);
-    if (cartItems.length === 1 ){
-      const productIds = cartItems.map((item) => item.id);
-      const totalPrice = cartItems[0].price;
-      const orderData = {
-        productIds: productIds,
-        userId: user_id, // Replace with the actual user ID
-        orderStatus: 'ACCEPTED',
-        price: totalPrice,
-        shippingAddress: 'Lietuva, Vilnius, Gedimino pr. 1'
-      };
-      api.postOrder(orderData)
-      .then(data => {
-        setOrderId(data.id);
-      })
-      .catch(error => {
-        console.log(error);
+    if (token == null) {
+      getAccessTokenSilently().then((token) => {
+        setToken(token);
+        console.log(token)
       });
     }
-    else if(cartItems.length > 1){ 
-      const productIds = cartItems.map((item) => item.id);
-      const totalPrice = cartItems.reduce((total, item) => total + item.price, 0);
-      const orderData = {
-        productIds: productIds,
-        userId: user_id, // Replace with the actual user ID
-        orderStatus: 'ACCEPTED',
-        price: totalPrice,
-        shippingAddress: 'Lietuva, Vilnius, Gedimino pr. 1'
+  }, []);
+  useEffect(() => {
+    if (token) {
+      const orderDetails = {
+        userEmail:  user.email,
+        orderStatus: "PLACED"
       };
-        
-      api.putOrder(orderData,ordreId)
-      .then(data => {
-        console.log(data);
-      })
-      .catch(error => {
-        console.log(error);
+      api.getOrdersFilter(token,orderDetails).then((data) => {
+        setOrder(data);
+        console.log(data)
       });
-
     }
-  }, [cartItems]);
+  }, [token]);
+  useEffect(() => {
+    console.log("Order information:", order)
+  }, [order]);
+  
 
   useEffect(() => {
     api.getProducts().then((data) => {

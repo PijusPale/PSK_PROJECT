@@ -16,11 +16,12 @@ function getProducts() {
     });
 }
 
-async function postOrder(orderData) {
+async function postOrder(orderData,token) {
   try {
     const config = {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       }
     };
 
@@ -32,11 +33,12 @@ async function postOrder(orderData) {
   }
 }
 
-async function putOrder(orderData,orderId) {
+async function putOrder(orderData,orderId,token) {
   try {
     const config = {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       }
     };
     const response = await axios.put(`${API_URL}/order/${orderId}`, orderData, config);
@@ -61,11 +63,28 @@ function getOrderById(orderId) {
     });
 }
 
+function getOrdersFilter(token, orderDetails) {
+  return axios.get(`${API_URL}/orders/filter`, {
+    params: orderDetails,
+    headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+  })
+    .then((response) => response.data) 
+    .catch((error) => {
+      console.error("Error fetching products:", error);
+    });
+}
+
 const api = {
     getProducts,
     postOrder,
     putOrder,
     getOrderById,
+    getOrdersFilter,
   };
   
   export default api;
