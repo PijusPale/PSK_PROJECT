@@ -58,6 +58,7 @@ const Home = () => {
         orderStatus: "PLACED"
       };
       api.getOrdersFilter(token,orderDetails).then((data) => {
+        console.log(data)
         setOrder(data);
         console.log(data)
       });

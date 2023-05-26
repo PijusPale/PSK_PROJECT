@@ -79,12 +79,29 @@ function getOrdersFilter(token, orderDetails) {
     });
 }
 
+// post payment
+function postPayment(token, paymentDetails) {
+  return axios.post(`${API_URL}/payment`, paymentDetails, {
+    headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+  })
+    .then((response) => response.data) 
+    .catch((error) => {
+      console.error("Error fetching products:", error);
+    });
+}
+
 const api = {
     getProducts,
     postOrder,
     putOrder,
     getOrderById,
     getOrdersFilter,
+    postPayment,
   };
   
   export default api;

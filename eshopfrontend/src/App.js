@@ -10,6 +10,7 @@ import './styles/App.css';
 import ProductForm from './pages/ProductForm';
 import Faq from './pages/Faq';
 import OrdersPage from './pages/OrdersPage';
+import Checkout from './pages/Checkout'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route exact path="/faq" element={<Faq />} />
             <Route exact path="/contacts" element={<Contacts />} />
             <Route exact path="/orders" element={<OrdersPage />} />
+            <Route exact path="/checkout" element={<Checkout />} />
           </Routes>
         </div>
       </div>
