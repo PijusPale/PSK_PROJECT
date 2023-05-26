@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { useAuth0 } from '@auth0/auth0-react';
+import SoundPlayer from '../components/SoundPlayer';
 
 const ProductForm = () => {
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -104,6 +105,7 @@ const ProductForm = () => {
       {showSuccess && <Alert variant="success">Product uploaded successfully!</Alert>}
       {showError && <Alert variant="danger">{errorMessage}</Alert>}
       <Button variant="primary" type="submit">Submit</Button>
+      <SoundPlayer></SoundPlayer>
     </Form>
   );
 };
