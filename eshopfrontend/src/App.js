@@ -9,7 +9,8 @@ import Header from './components/Header';
 import './styles/App.css';
 import ProductForm from './pages/ProductForm';
 import Faq from './pages/Faq';
-import Checkout from './pages/Checkout';
+import OrdersPage from './pages/OrdersPage';
+import Checkout from './pages/Checkout'
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route exact path="/about" element={<About />} />
             <Route exact path="/faq" element={<Faq />} />
             <Route exact path="/contacts" element={<Contacts />} />
+            <Route exact path="/orders" element={<OrdersPage />} />
             <Route exact path="/checkout" element={<Checkout />} />
           </Routes>
         </div>
